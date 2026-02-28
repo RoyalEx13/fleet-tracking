@@ -1,0 +1,15 @@
+# Elixir
+**/_build/
+**/deps/
+**/.elixir_ls/
+
+# Go
+**/bin/
+*.exe
+
+# Docker & Database
+pgdata/
+.env
+
+# Windows
+Thumbs.db
