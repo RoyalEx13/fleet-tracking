@@ -1,6 +1,5 @@
 defmodule FleetTrackingWeb.Router do
   use FleetTrackingWeb, :router
-  import AshAdmin.Router
   use AshAuthentication.Phoenix.Router
   import AshAuthentication.Plug.Helpers
   import Phoenix.LiveView.Router
@@ -118,9 +117,9 @@ defmodule FleetTrackingWeb.Router do
   if Application.compile_env(:fleet_tracking, :dev_routes) do
     import AshAdmin.Router
 
-    scope "/admin" do
+    scope "/" do
       pipe_through :browser
-      ash_admin "/"
+      ash_admin "/admin"
     end
   end
 end

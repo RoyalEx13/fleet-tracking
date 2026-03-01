@@ -82,7 +82,7 @@ config :spark,
 config :fleet_tracking,
   ecto_repos: [FleetTracking.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [FleetTracking.Accounts],
+  ash_domains: [FleetTracking.Accounts,FleetTracking.Fleet],
   ash_authentication: [return_error_on_invalid_magic_link_token?: true]
 
 # Configure the endpoint
@@ -110,4 +110,4 @@ import_config "#{config_env()}.exs"
 
 config :ash_admin,
   show_navigation_menu?: true,
-  domains: [FleetTracking.Accounts]
+  domains: [FleetTracking.Accounts,FleetTracking.Fleet]
