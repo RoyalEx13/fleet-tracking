@@ -1,15 +1,32 @@
-# Elixir
-**/_build/
-**/deps/
-**/.elixir_ls/
-
-# Go
-**/bin/
-*.exe
-
-# Docker & Database
-pgdata/
+/pgdata/
+/postgres_data/
 .env
+.env.test
+.env.*.local
+.docker-build/
 
-# Windows
+**/bin/
+/go/bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+/vendor/
+go.work.sum
+
+.DS_Store
+.AppleDouble
+.LSOverride
 Thumbs.db
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.iml
+*~
+*.swp
+
+*.log
+/tmp/

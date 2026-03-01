@@ -1,0 +1,7 @@
+services:
+  app:
+    volumes: []
+    environment:
+      - MIX_ENV=prod
+  db:
+    ports: []

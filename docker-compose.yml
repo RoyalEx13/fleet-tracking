@@ -1,13 +1,63 @@
-version: '3.8'
 services:
+  app:
+    build:
+      context: ./core-ash
+      dockerfile: ../Dockerfile
+      args:
+        - MIX_ENV=${MIX_ENV}
+    container_name: fleet_app
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - MIX_ENV=${MIX_ENV}
+      - PORT=${PORT:-4000}
+    ports:
+      - "${APP_PORT_MAPPING:-4000:4000}"
+    depends_on:
+      - db
+      - nats
+    volumes:
+      - ${APP_VOLUME_SYNC:-./core-ash:/app}
+      - _build_cache:/app/_build
+      - deps_cache:/app/deps
+
+  # gateway:
+  #   build:
+  #     context: ./gateway-go
+  #   container_name: fleet_gateway
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - app
+  #   ports:
+  #     - "${GATEWAY_PORT_MAPPING:-8080:8080}"
+
   db:
     image: timescale/timescaledb:latest-pg15
+    container_name: fleet_db
+    restart: always
     environment:
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     ports:
-      - "5432:5432"
+      - "${DB_PORT_MAPPING:-5432:5432}"
+    volumes:
+      - ${DB_VOLUME_PATH:-postgres_data}:/var/lib/postgresql/data
+    shm_size: '128mb'
+
   nats:
     image: nats:latest
+    container_name: fleet_nats
+    restart: always
     ports:
       - "4222:4222"
       - "8222:8222"
+
+volumes:
+  postgres_data:
+  _build_cache:
+  deps_cache:
