@@ -1,11 +1,19 @@
 defmodule FleetTracking.Fleet.LocationLog do
   use Ash.Resource,
     domain: FleetTracking.Fleet,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshJsonApi.Resource, AshAdmin.Resource]
 
   postgres do
     table "location_logs"
     repo FleetTracking.Repo
+  end
+
+  json_api do
+    type "location_log"
+    routes do
+      post :create
+    end
   end
 
   attributes do
@@ -17,13 +25,17 @@ defmodule FleetTracking.Fleet.LocationLog do
   end
 
   relationships do
-    belongs_to :vehicle, FleetTracking.Fleet.Vehicle, allow_nil?: false
+    belongs_to :vehicle, FleetTracking.Fleet.Vehicle do
+      allow_nil? false
+      attribute_type :uuid
+    end
   end
 
   actions do
     defaults [:read, :destroy]
 
     create :create do
+      primary? true
       accept [:latitude, :longitude, :speed, :vehicle_id]
     end
   end

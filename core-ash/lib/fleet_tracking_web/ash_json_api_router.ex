@@ -1,5 +1,7 @@
 defmodule FleetTrackingWeb.AshJsonApiRouter do
   use AshJsonApi.Router,
-    domains: [],
+    domains: [
+      FleetTracking.Fleet
+    ],
     open_api: "/open_api"
 end

@@ -1,6 +1,7 @@
 defmodule FleetTracking.Fleet.Vehicle do
   use Ash.Resource,
     domain: FleetTracking.Fleet,
+    extensions: [AshJsonApi.Resource, AshAdmin.Resource],
     data_layer: AshPostgres.DataLayer
 
   postgres do
@@ -19,6 +20,7 @@ defmodule FleetTracking.Fleet.Vehicle do
       constraints [one_of: [:active, :maintenance, :inactive]]
       default :active
     end
+    attribute :driver_id, :uuid
     timestamps()
   end
 

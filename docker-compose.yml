@@ -13,6 +13,8 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - MIX_ENV=${MIX_ENV}
       - PORT=${PORT:-4000}
+      - PHX_SERVER=${PHX_SERVER:-true}
+      - PHX_HOST=${PHX_HOST:-0.0.0.0}
     ports:
       - "${APP_PORT_MAPPING:-4000:4000}"
     depends_on:
@@ -23,17 +25,22 @@ services:
       - _build_cache:/app/_build
       - deps_cache:/app/deps
 
-  # gateway:
-  #   build:
-  #     context: ./gateway-go
-  #   container_name: fleet_gateway
-  #   restart: always
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     - app
-  #   ports:
-  #     - "${GATEWAY_PORT_MAPPING:-8080:8080}"
+  gateway:
+    build:
+      context: ./gateway-go
+      dockerfile: Dockerfile
+    container_name: fleet_gateway
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - CORE_API_URL=${CORE_API_URL}
+    depends_on:
+      - app
+    ports:
+      - "${GATEWAY_PORT_MAPPING:-8080:8080}"
+    volumes:
+      - ./gateway-go:/app
 
   db:
     image: timescale/timescaledb:latest-pg15
@@ -47,7 +54,7 @@ services:
       - "${DB_PORT_MAPPING:-5432:5432}"
     volumes:
       - ${DB_VOLUME_PATH:-postgres_data}:/var/lib/postgresql/data
-    shm_size: '128mb'
+    shm_size: "128mb"
 
   nats:
     image: nats:latest

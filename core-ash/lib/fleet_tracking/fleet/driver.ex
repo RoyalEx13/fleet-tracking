@@ -1,7 +1,8 @@
 defmodule FleetTracking.Fleet.Driver do
   use Ash.Resource,
     domain: FleetTracking.Fleet,
-    data_layer: AshPostgres.DataLayer
+    data_layer: AshPostgres.DataLayer,
+    extensions: [AshJsonApi.Resource, AshAdmin.Resource]
 
   postgres do
     table "drivers"
