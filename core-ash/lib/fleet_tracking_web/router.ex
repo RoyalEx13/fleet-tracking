@@ -31,6 +31,8 @@ defmodule FleetTrackingWeb.Router do
     get "/", HomeController, :index
     auth_routes AuthController, FleetTracking.Accounts.User, path: "/auth"
     sign_out_route AuthController
+    live "/dashboard", DashboardLive
+    live "/map", MapLive
 
     # Remove these if you'd like to use your own authentication views
     sign_in_route register_path: "/register",

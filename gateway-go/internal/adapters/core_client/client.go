@@ -33,7 +33,15 @@ func (c *CoreClient) SendToCore(loc domain.Location) error {
 
 	data, _ := json.Marshal(payload)
 
-	resp, err := c.client.Post(c.URL, "application/vnd.api+json", bytes.NewBuffer(data))
+	req, err := http.NewRequest("POST", c.URL, bytes.NewBuffer(data))
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Content-Type", "application/vnd.api+json")
+	req.Header.Set("Accept", "application/vnd.api+json")
+
+	resp, err := c.client.Do(req)
 	if err != nil {
 		return err
 	}

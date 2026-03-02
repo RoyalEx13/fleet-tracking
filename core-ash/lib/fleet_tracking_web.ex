@@ -70,10 +70,7 @@ defmodule FleetTrackingWeb do
   defp html_helpers do
     quote do
       import Phoenix.HTML
-      import Phoenix.HTML.Tag
-      import Phoenix.HTML.Form
 
-      import FleetTrackingWeb.CoreComponents
 
       unquote(verified_routes())
     end
@@ -84,5 +81,22 @@ defmodule FleetTrackingWeb do
   """
   defmacro __using__(which) when is_atom(which) do
     apply(__MODULE__, which, [])
+  end
+
+  def live_view do
+    quote do
+      use Phoenix.LiveView,
+        layout: {FleetTrackingWeb.Layouts, :app}
+
+      unquote(html_helpers())
+    end
+  end
+
+  def live_component do
+    quote do
+      use Phoenix.LiveComponent
+
+      unquote(html_helpers())
+    end
   end
 end

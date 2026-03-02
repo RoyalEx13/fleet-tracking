@@ -23,7 +23,9 @@ config :fleet_tracking, FleetTrackingWeb.Endpoint,
   code_reloader: true,
   debug_errors: true,
   secret_key_base: System.get_env("SECRET_KEY_BASE") || "paste_your_generated_secret_token_key_base_here_at_least_64_chars",
-  watchers: []
+  watchers: [
+    esbuild: {Esbuild, :install_and_run, [:fleet_tracking, ~w(--sourcemap=inline --watch)]}
+  ]
 
 # ## SSL Support
 #

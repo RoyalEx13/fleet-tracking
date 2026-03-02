@@ -77,7 +77,8 @@ defmodule FleetTracking.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
-      {:igniter, "~> 0.7", only: [:dev, :test]}
+      {:igniter, "~> 0.7", only: [:dev, :test]},
+      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev}
     ]
   end
 
@@ -93,7 +94,13 @@ defmodule FleetTracking.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ash.setup --quiet", "test"],
-      precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"]
+      precommit: ["compile --warnings-as-errors", "deps.unlock --unused", "format", "test"],
+      "assets.setup": ["esbuild.install --if-missing"],
+      "assets.build": ["esbuild fleet_tracking"],
+      "assets.deploy": [
+        "esbuild fleet_tracking --minify",
+        "phx.digest"
+      ]
     ]
   end
 end

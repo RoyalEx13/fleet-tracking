@@ -25,3 +25,12 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 fleet_tracking-*.tar
 
+/priv/static/assets/
+/priv/static/cache_manifest.json
+
+/priv/static/**/*.gz
+/priv/static/**/*-*.*
+
+!/priv/static/favicon.ico
+!/priv/static/robots.txt
+!/priv/static/images/

@@ -10,7 +10,7 @@ ENV MIX_ENV=${MIX_ENV:-dev}
 RUN mix local.hex --force && \
     mix local.rebar --force
 
-COPY mix.exs mix.lock* ./
+COPY . .
 
 RUN mix deps.get --only $MIX_ENV
 
@@ -18,8 +18,7 @@ RUN if [ -d "deps/langchain" ]; then \
       sed -i 's/get_in(req_body)/get_in(req_body, [])/g' deps/langchain/lib/chat_models/chat_google_ai.ex; \
     fi
 
-COPY . .
-
 RUN mix compile
+RUN mix esbuild.install
 
-CMD ["sh", "-c", "mix deps.get && mix ash.setup && mix phx.server"]
+CMD ["sh", "-c", "mix deps.get && mix assets.deploy && mix ash.setup && mix phx.server"]
