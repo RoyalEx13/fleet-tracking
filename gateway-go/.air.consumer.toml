@@ -1,0 +1,14 @@
+root = "cmd/consumer"
+tmp_dir = "../../tmp"
+
+[build]
+  cmd = "go build -o ./tmp/consumer ./cmd/consumer/main.go"
+  bin = "./tmp/consumer"
+  include_ext = ["go", "tpl", "tmpl", "html", "toml"]
+  exclude_dir = ["assets", "tmp", "vendor", "test"]
+  delay = 1000
+  poll = true
+  poll_interval = 500
+
+[log]
+  time = true

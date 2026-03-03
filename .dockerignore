@@ -1,0 +1,13 @@
+# Elixir / Phoenix
+core-ash/_build
+core-ash/deps
+core-ash/.elixir_ls
+
+# Go
+gateway-go/tmp
+gateway-go/bin
+
+# General
+.git
+.env
+node_modules

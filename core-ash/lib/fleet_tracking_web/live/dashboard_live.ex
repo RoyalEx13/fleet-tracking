@@ -1,6 +1,5 @@
 defmodule FleetTrackingWeb.DashboardLive do
   use FleetTrackingWeb, :live_view
-  alias FleetTracking.Fleet
 
   def mount(_params, _session, socket) do
     case Ash.read(FleetTracking.Fleet.LocationLog) do

@@ -12,18 +12,9 @@ services:
     environment:
       - DATABASE_URL=${DATABASE_URL}
       - MIX_ENV=${MIX_ENV}
-      - PORT=${PORT:-4000}
-      - PHX_SERVER=${PHX_SERVER:-true}
-      - PHX_HOST=${PHX_HOST:-0.0.0.0}
-    ports:
-      - "${APP_PORT_MAPPING:-4000:4000}"
     depends_on:
       - db
       - nats
-    volumes:
-      - ${APP_VOLUME_SYNC:-./core-ash:/app}
-      - _build_cache:/app/_build
-      - deps_cache:/app/deps
 
   gateway:
     build:
@@ -33,14 +24,20 @@ services:
     restart: always
     env_file:
       - .env
-    environment:
-      - CORE_API_URL=${CORE_API_URL}
     depends_on:
+      - nats
+
+  consumer:
+    build: 
+      context: ./gateway-go
+      dockerfile: Dockerfile
+    container_name: fleet_consumer
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - nats
       - app
-    ports:
-      - "${GATEWAY_PORT_MAPPING:-8080:8080}"
-    volumes:
-      - ./gateway-go:/app
 
   db:
     image: timescale/timescaledb:latest-pg15
@@ -50,8 +47,6 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
-    ports:
-      - "${DB_PORT_MAPPING:-5432:5432}"
     volumes:
       - ${DB_VOLUME_PATH:-postgres_data}:/var/lib/postgresql/data
     shm_size: "128mb"
@@ -60,9 +55,9 @@ services:
     image: nats:latest
     container_name: fleet_nats
     restart: always
-    ports:
-      - "4222:4222"
-      - "8222:8222"
+    command: ["-js", "-m", "8222"]
+    volumes:
+      - ./nats-data:/data
 
 volumes:
   postgres_data:

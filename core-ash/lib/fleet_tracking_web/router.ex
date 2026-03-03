@@ -98,6 +98,8 @@ defmodule FleetTrackingWeb.Router do
 
   scope "/api", FleetTrackingWeb do
     pipe_through :api
+
+    post "/location_logs", LocationLogController, :create
   end
 
   # Enable LiveDashboard in development

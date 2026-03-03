@@ -1,7 +1,21 @@
 services:
   app:
-    volumes: []
     environment:
       - MIX_ENV=prod
+    volumes: 
+      - _build_cache:/app/_build
+      - deps_cache:/app/deps
+
+  gateway:
+    command: 
+      - "./gateway"
+
+  consumer:
+    command: 
+      - "./consumer"
+
   db:
+    ports: [] 
+
+  nats:
     ports: []

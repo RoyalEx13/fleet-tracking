@@ -1,0 +1,40 @@
+services:
+  simulator:
+    build: ./gateway-go
+    container_name: fleet_simulator
+    command: air -c .air.simulator.toml
+    env_file: 
+      - .env
+    volumes: 
+      - "./gateway-go:/app"
+    depends_on: 
+      - gateway
+
+  gateway:
+    build: ./gateway-go
+    command: air -c .air.gateway.toml
+    volumes: 
+      - "./gateway-go:/app"
+    ports: 
+      - "${GATEWAY_PORT_MAPPING:-8080:8080}"
+
+  consumer:
+    build: ./gateway-go
+    command: air -c .air.consumer.toml
+    volumes: 
+      - "./gateway-go:/app"
+
+  app:
+    ports: 
+      - "${APP_PORT_MAPPING:-4000:4000}"
+    volumes:
+      - ${APP_VOLUME_SYNC:-./core-ash:/app}
+
+  db:
+    ports: 
+      - "${DB_PORT_MAPPING:-5432:5432}"
+
+  nats:
+    ports: 
+      - "4222:4222"
+      - "8222:8222"

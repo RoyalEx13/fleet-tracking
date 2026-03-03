@@ -1,0 +1,14 @@
+root = "cmd/simulator"
+tmp_dir = "../../tmp"
+
+[build]
+  cmd = "go build -o ./tmp/simulator ./cmd/simulator/main.go"
+  bin = "./tmp/simulator"
+  include_ext = ["go", "tpl", "tmpl", "html", "toml"]
+  exclude_dir = ["assets", "tmp", "vendor", "test"]
+  delay = 1000
+  poll = true
+  poll_interval = 500
+
+[log]
+  time = true
